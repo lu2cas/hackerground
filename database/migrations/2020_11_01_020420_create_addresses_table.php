@@ -31,8 +31,6 @@ class CreateAddressesTable extends Migration
             $table->foreign('hackerspace_id')->references('id')->on('hackerspaces');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('updated_by')->references('id')->on('users');
-
-            $table->timestamps();
         });
     }
 
