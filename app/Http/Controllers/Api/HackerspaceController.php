@@ -4,35 +4,43 @@ namespace App\Http\Controllers\Api;
 
 use App\Api\ApiMessages;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\HackerspaceRequest;
 use App\Models\Hackerspace;
+use App\Http\Requests\HackerspaceRequest;
 
 class HackerspaceController extends Controller
 {
     private $hackerspace;
 
-    public function __construct(Hackerspace $hackerspace) {
+    /**
+     * Constructor
+     *
+     * @param Hackerspace $hackerspace
+     * @return void
+     */
+    public function __construct(Hackerspace $hackerspace)
+    {
         $this->hackerspace = $hackerspace;
     }
 
-    public function index() {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index()
+    {
         $hackerspaces = $this->hackerspace->paginate(10);
         return response()->json($hackerspaces, 200);
     }
 
-    public function show($id) {
-        try {
-            $hackerspace = $this->hackerspace->findOrFail($id);
-            return response()->json([
-                'data' => [$hackerspace]
-            ], 200);
-        } catch(\Exception $e) {
-            $message = new ApiMessages($e->getMessage());
-            return response()->json($message->getMessage(), 401);
-        }
-    }
-
-    public function store(HackerspaceRequest $request) {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param HackerspaceRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(HackerspaceRequest $request)
+    {
         $data = $request->all();
         try {
             $hackerspace = $this->hackerspace->create($data);
@@ -47,7 +55,34 @@ class HackerspaceController extends Controller
         }
     }
 
-    public function update(HackerspaceRequest $request, $id) {
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        try {
+            $hackerspace = $this->hackerspace->findOrFail($id);
+            return response()->json([
+                'data' => [$hackerspace]
+            ], 200);
+        } catch(\Exception $e) {
+            $message = new ApiMessages($e->getMessage());
+            return response()->json($message->getMessage(), 401);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  HackerspaceRequest  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(HackerspaceRequest $request, $id)
+    {
         $data = $request->all();
         try {
             $hackerspace = $this->hackerspace->findOrFail($id);
@@ -63,7 +98,14 @@ class HackerspaceController extends Controller
         }
     }
 
-    public function destroy($id) {
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($id)
+    {
         try {
             $hackerspace = $this->hackerspace->findOrFail($id);
             $hackerspace->delete();

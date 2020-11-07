@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class HackerspaceRequest extends FormRequest
 {
@@ -24,14 +25,15 @@ class HackerspaceRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'description' => 'required',
-            'geolocation' => 'required',
-            'logo_path' => 'required',
-            'foundation' => 'required',
-            'status' => 'required',
-            'website' => 'required',
-            'email' => 'required'
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'geolocation' => ['nullable', 'string'],
+            // @todo Validate uploaded image and its MIME type
+            // 'logo_path' => ['nullable', 'image'],
+            'foundation' => ['required', 'date'],
+            'status' => ['required', Rule::in(['ACTIVE', 'INACTIVE', 'PLANNED'])],
+            'website' => ['nullable', 'url'],
+            'email' => ['required', 'email']
         ];
     }
 }
