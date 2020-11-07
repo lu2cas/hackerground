@@ -21,4 +21,8 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('hackerspaces.')->group(function() {
         Route::resource('hackerspaces', 'HackerspaceController');
     });
+
+    Route::name('users.')->group(function() {
+        Route::resource('users', 'UserController');
+    });
 });
