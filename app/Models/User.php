@@ -20,6 +20,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
+        'bio',
+        'website',
+        'avatar_path'
     ];
 
     /**
@@ -40,4 +44,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function hackerspace() {
+        return $this->hasMany(Hackerspace::class);
+    }
 }
