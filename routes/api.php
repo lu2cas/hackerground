@@ -33,4 +33,8 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('projects.')->group(function() {
         Route::resource('projects', 'ProjectController');
     });
+
+    Route::name('blog_posts.')->group(function() {
+        Route::resource('blog-posts', 'BlogPostController');
+    });
 });

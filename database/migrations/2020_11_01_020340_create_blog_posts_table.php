@@ -19,6 +19,7 @@ class CreateBlogPostsTable extends Migration
             $table->string('title');
             $table->text('excerpt');
             $table->text('body');
+            $table->string('slug');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
