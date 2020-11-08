@@ -4,18 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Api\ApiMessages;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
-use App\Models\User;
+use App\Http\Requests\EventRequest;
+use App\Models\Event;
 
-class UserController extends Controller
+class EventController extends Controller
 {
-    private $user;
+    private $event;
 
-    public function __construct(User $user)
+    /**
+     * Constructor
+     *
+     * @param Event $event
+     * @return void
+     */
+    public function __construct(Event $event)
     {
-        $this->user = $user;
+        $this->event = $event;
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -23,28 +28,24 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->user->paginate(10);
-        return response()->json($users, 200);
+        $events = $this->event->paginate(10);
+        return response()->json($events, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  UserRequest  $request
+     * @param  EventRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(UserRequest $request)
+    public function store(EventRequest $request)
     {
         $data = $request->all();
-        if (!$request->has('password') || !$request->get('password')) {
-            return response()->json('O campo senha é obrigatório.', 401);
-        }
         try {
-            $data['password'] = bcrypt($data[]);
-            $user = $this->user->create($data);
+            $event = $this->event->create($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Usuário criado com sucesso.'
+                    'message' => 'Evento criado com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -62,9 +63,9 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $user = $this->user->findOrFail($id);
+            $event = $this->event->findOrFail($id);
             return response()->json([
-                'data' => [$user]
+                'data' => [$event]
             ], 200);
         } catch(\Exception $e) {
             $message = new ApiMessages($e->getMessage());
@@ -75,24 +76,19 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  UserRequest  $request
+     * @param  EventRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UserRequest $request, $id)
+    public function update(EventRequest $request, $id)
     {
         $data = $request->all();
-        if ($request->has('password') && $request->get('password')) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
-        }
         try {
-            $user = $this->user->findOrFail($id);
-            $user->update($data);
+            $event = $this->event->findOrFail($id);
+            $event->update($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Usuário atualizado com sucesso.'
+                    'message' => 'Evento atualizado com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -110,11 +106,11 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
-            $user = $this->user->findOrFail($id);
-            $user->delete();
+            $event = $this->event->findOrFail($id);
+            $event->delete();
             return response()->json([
                 'data' => [
-                    'message' => 'Usuário removido com sucesso.'
+                    'message' => 'Evento removido com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
