@@ -29,4 +29,8 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('events.')->group(function() {
         Route::resource('events', 'EventController');
     });
+
+    Route::name('projects.')->group(function() {
+        Route::resource('projects', 'ProjectController');
+    });
 });

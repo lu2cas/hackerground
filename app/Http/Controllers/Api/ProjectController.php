@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use App\Api\ApiMessages;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EventRequest;
-use App\Models\Event;
+use App\Http\Requests\ProjectRequest;
+use App\Models\Project;
 
-class EventController extends Controller
+class ProjectController extends Controller
 {
-    private $event;
+    private $project;
 
     /**
      * Constructor
      *
-     * @param Event $event
+     * @param Project $project
      * @return void
      */
-    public function __construct(Event $event)
+    public function __construct(Project $project)
     {
-        $this->event = $event;
+        $this->project = $project;
     }
 
     /**
@@ -29,24 +29,24 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = $this->event->paginate(10);
-        return response()->json($events, 200);
+        $projects = $this->project->paginate(10);
+        return response()->json($projects, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  EventRequest  $request
+     * @param  ProjectRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(EventRequest $request)
+    public function store(ProjectRequest $request)
     {
         $data = $request->all();
         try {
-            $event = $this->event->create($data);
+            $project = $this->project->create($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Evento criado com sucesso.'
+                    'message' => 'Projeto criado com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -64,9 +64,9 @@ class EventController extends Controller
     public function show($id)
     {
         try {
-            $event = $this->event->findOrFail($id);
+            $project = $this->project->findOrFail($id);
             return response()->json([
-                'data' => [$event]
+                'data' => [$project]
             ], 200);
         } catch(\Exception $e) {
             $message = new ApiMessages($e->getMessage());
@@ -77,19 +77,19 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  EventRequest  $request
+     * @param  ProjectRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(EventRequest $request, $id)
+    public function update(ProjectRequest $request, $id)
     {
         $data = $request->all();
         try {
-            $event = $this->event->findOrFail($id);
-            $event->update($data);
+            $project = $this->project->findOrFail($id);
+            $project->update($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Evento atualizado com sucesso.'
+                    'message' => 'Projeto atualizado com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -107,11 +107,11 @@ class EventController extends Controller
     public function destroy($id)
     {
         try {
-            $event = $this->event->findOrFail($id);
-            $event->delete();
+            $project = $this->project->findOrFail($id);
+            $project->delete();
             return response()->json([
                 'data' => [
-                    'message' => 'Evento removido com sucesso.'
+                    'message' => 'Projeto removido com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {

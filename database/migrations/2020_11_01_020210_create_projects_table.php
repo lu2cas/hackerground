@@ -19,6 +19,7 @@ class CreateProjectsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->date('start_date');
+            $table->date('end_date')->nullable();
             $table->enum('status', ['ONGOING', 'PAUSED', 'FINISHED']);
             // @todo Change "category" to a foreign key to an external table
             $table->enum('category', ['SOFTWARE', 'HARDWARE', 'SOCIAL']);
