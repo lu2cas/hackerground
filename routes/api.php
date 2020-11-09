@@ -41,4 +41,8 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('press_mentions.')->group(function() {
         Route::resource('press-mentions', 'PressMentionController');
     });
+
+    Route::name('address.')->group(function() {
+        Route::resource('address', 'AddressController');
+    });
 });

@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use App\Api\ApiMessages;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PressMentionRequest;
-use App\Models\PressMention;
+use App\Http\Requests\AddressRequest;
+use App\Models\Address;
 
-class PressMentionController extends Controller
+class AddressController extends Controller
 {
-    private $pressMention;
+    private $address;
 
     /**
      * Constructor
      *
-     * @param PressMention $pressMention
+     * @param Address $address;
      * @return void
      */
-    public function __construct(PressMention $pressMention)
+    public function __construct(Address $address)
     {
-        $this->pressMention = $pressMention;
+        $this->address = $address;
     }
 
     /**
@@ -29,24 +29,24 @@ class PressMentionController extends Controller
      */
     public function index()
     {
-        $pressMentions = $this->pressMention->paginate(10);
-        return response()->json($pressMentions, 200);
+        $addresses = $this->address->paginate(10);
+        return response()->json($addresses, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  PressMentionRequest  $request
+     * @param  AddressRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(PressMentionRequest $request)
+    public function store(AddressRequest $request)
     {
         $data = $request->all();
         try {
-            $pressMention = $this->pressMention->create($data);
+            $address = $this->address->create($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Menção na imprensa criada com sucesso.'
+                    'message' => 'Endereço criado com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -64,9 +64,9 @@ class PressMentionController extends Controller
     public function show($id)
     {
         try {
-            $pressMention = $this->pressMention->findOrFail($id);
+            $address = $this->address->findOrFail($id);
             return response()->json([
-                'data' => [$pressMention]
+                'data' => [$address]
             ], 200);
         } catch(\Exception $e) {
             $message = new ApiMessages($e->getMessage());
@@ -77,19 +77,19 @@ class PressMentionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  PressMentionRequest  $request
+     * @param  AddressRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(PressMentionRequest $request, $id)
+    public function update(AddressRequest $request, $id)
     {
         $data = $request->all();
         try {
-            $pressMention = $this->pressMention->findOrFail($id);
-            $pressMention->update($data);
+            $address = $this->address->findOrFail($id);
+            $address->update($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Menção na imprensa atualizada com sucesso.'
+                    'message' => 'Endereço atualizado com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -107,11 +107,11 @@ class PressMentionController extends Controller
     public function destroy($id)
     {
         try {
-            $pressMention = $this->pressMention->findOrFail($id);
-            $pressMention->delete();
+            $address = $this->address->findOrFail($id);
+            $address->delete();
             return response()->json([
                 'data' => [
-                    'message' => 'Menção na imprensa removida com sucesso.'
+                    'message' => 'Endereço removido com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
