@@ -49,4 +49,8 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('galleries.')->group(function() {
         Route::resource('galleries', 'GalleryController');
     });
+
+    Route::name('galleries_items.')->group(function() {
+        Route::resource('galleries-items', 'GalleryItemController');
+    });
 });
