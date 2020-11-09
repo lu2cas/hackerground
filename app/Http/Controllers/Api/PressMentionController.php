@@ -4,24 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Api\ApiMessages;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BlogPostRequest;
-use App\Models\BlogPost;
+use App\Http\Requests\PressMentionRequest;
+use App\Models\PressMention;
 
-class BlogPostController extends Controller
+class PressMentionController extends Controller
 {
-    private $blogPost;
+    private $pressMention;
 
     /**
      * Constructor
      *
-     * @param BlogPost $blogPost
+     * @param PressMention $pressMention
      * @return void
      */
-    public function __construct(BlogPost $blogPost)
+    public function __construct(PressMention $pressMention)
     {
-        $this->blogPost = $blogPost;
+        $this->pressMention = $pressMention;
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -29,24 +28,24 @@ class BlogPostController extends Controller
      */
     public function index()
     {
-        $blogPosts = $this->blogPost->paginate(10);
-        return response()->json($blogPosts, 200);
+        $pressMentions = $this->pressMention->paginate(10);
+        return response()->json($pressMentions, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  BlogPostRequest  $request
+     * @param  PressMentionRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(BlogPostRequest $request)
+    public function store(PressMentionRequest $request)
     {
         $data = $request->all();
         try {
-            $blogPost = $this->blogPost->create($data);
+            $pressMention = $this->pressMention->create($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Postagem criada com sucesso.'
+                    'message' => 'Menção na imprensa criada com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -64,9 +63,9 @@ class BlogPostController extends Controller
     public function show($id)
     {
         try {
-            $blogPost = $this->blogPost->findOrFail($id);
+            $pressMention = $this->pressMention->findOrFail($id);
             return response()->json([
-                'data' => [$blogPost]
+                'data' => [$pressMention]
             ], 200);
         } catch(\Exception $e) {
             $message = new ApiMessages($e->getMessage());
@@ -77,19 +76,19 @@ class BlogPostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  BlogPostRequest  $request
+     * @param  PressMentionRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(BlogPostRequest $request, $id)
+    public function update(PressMentionRequest $request, $id)
     {
         $data = $request->all();
         try {
-            $blogPost = $this->blogPost->findOrFail($id);
-            $blogPost->update($data);
+            $pressMention = $this->pressMention->findOrFail($id);
+            $pressMention->update($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Postagem atualizada com sucesso.'
+                    'message' => 'Menção na imprensa atualizada com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -107,11 +106,11 @@ class BlogPostController extends Controller
     public function destroy($id)
     {
         try {
-            $blogPost = $this->blogPost->findOrFail($id);
-            $blogPost->delete();
+            $pressMention = $this->pressMention->findOrFail($id);
+            $pressMention->delete();
             return response()->json([
                 'data' => [
-                    'message' => 'Postagem removida com sucesso.'
+                    'message' => 'Menção na imprensa removida com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {

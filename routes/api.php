@@ -37,4 +37,8 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('blog_posts.')->group(function() {
         Route::resource('blog-posts', 'BlogPostController');
     });
+
+    Route::name('press_mentions.')->group(function() {
+        Route::resource('press-mentions', 'PressMentionController');
+    });
 });
