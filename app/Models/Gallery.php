@@ -16,4 +16,12 @@ class Gallery extends Model
         'updated_by',
         'hackerspace_id'
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function hackerspace() {
+        return $this->belongsTo(Hackerspace::class);
+    }
 }
