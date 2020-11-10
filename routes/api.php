@@ -57,4 +57,8 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('inventory_items.')->group(function() {
         Route::resource('inventory-items', 'InventoryItemController');
     });
+
+    Route::name('projects_updates.')->group(function() {
+        Route::resource('projects-updates', 'ProjectUpdateController');
+    });
 });

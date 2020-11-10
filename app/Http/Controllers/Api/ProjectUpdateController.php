@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use App\Api\ApiMessages;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\InventoryItemRequest;
-use App\Models\InventoryItem;
+use App\Http\Requests\ProjectUpdateRequest;
+use App\Models\ProjectUpdate;
 
-class InventoryItemController extends Controller
+class ProjectUpdateController extends Controller
 {
-    private $inventoryItem;
+    private $projectUpdate;
 
     /**
      * Constructor
      *
-     * @param InventoryItem $inventoryItem;
+     * @param ProjectUpdate $projectUpdate;
      * @return void
      */
-    public function __construct(InventoryItem $inventoryItem)
+    public function __construct(ProjectUpdate $projectUpdate)
     {
-        $this->inventoryItem = $inventoryItem;
+        $this->projectUpdate = $projectUpdate;
     }
 
     /**
@@ -29,24 +29,24 @@ class InventoryItemController extends Controller
      */
     public function index()
     {
-        $inventoryItems = $this->inventoryItem->paginate(10);
-        return response()->json($inventoryItems, 200);
+        $projectUpdates = $this->projectUpdate->paginate(10);
+        return response()->json($projectUpdates, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  InventoryItemRequest  $request
+     * @param  ProjectUpdateRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(InventoryItemRequest $request)
+    public function store(ProjectUpdateRequest $request)
     {
         $data = $request->all();
         try {
-            $inventoryItem = $this->inventoryItem->create($data);
+            $projectUpdate = $this->projectUpdate->create($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Item de inventário criado com sucesso.'
+                    'message' => 'Atualização de projeto criada com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -64,9 +64,9 @@ class InventoryItemController extends Controller
     public function show($id)
     {
         try {
-            $inventoryItem = $this->inventoryItem->findOrFail($id);
+            $projectUpdate = $this->projectUpdate->findOrFail($id);
             return response()->json([
-                'data' => [$inventoryItem]
+                'data' => [$projectUpdate]
             ], 200);
         } catch(\Exception $e) {
             $message = new ApiMessages($e->getMessage());
@@ -77,19 +77,19 @@ class InventoryItemController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  InventoryItemRequest  $request
+     * @param  ProjectUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(InventoryItemRequest $request, $id)
+    public function update(ProjectUpdateRequest $request, $id)
     {
         $data = $request->all();
         try {
-            $inventoryItem = $this->inventoryItem->findOrFail($id);
-            $inventoryItem->update($data);
+            $projectUpdate = $this->projectUpdate->findOrFail($id);
+            $projectUpdate->update($data);
             return response()->json([
                 'data' => [
-                    'message' => 'Item de inventário atualizado com sucesso.'
+                    'message' => 'Atualização de projeto atualizada com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
@@ -107,11 +107,11 @@ class InventoryItemController extends Controller
     public function destroy($id)
     {
         try {
-            $inventoryItem = $this->inventoryItem->findOrFail($id);
-            $inventoryItem->delete();
+            $projectUpdate = $this->projectUpdate->findOrFail($id);
+            $projectUpdate->delete();
             return response()->json([
                 'data' => [
-                    'message' => 'Item de inventário removido com sucesso.'
+                    'message' => 'Atualização de projeto removida com sucesso.'
                 ]
             ], 200);
         } catch(\Exception $e) {
