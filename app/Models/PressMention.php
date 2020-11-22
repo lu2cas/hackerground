@@ -12,7 +12,7 @@ class PressMention extends Model
     protected $fillable = [
         'title',
         'excerpt',
-        'publication_date',
+        'published_on',
         'url',
         'created_by',
         'updated_by',

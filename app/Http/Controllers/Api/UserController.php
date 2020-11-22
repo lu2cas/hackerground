@@ -40,7 +40,7 @@ class UserController extends Controller
             return response()->json('O campo senha é obrigatório.', 401);
         }
         try {
-            $data['password'] = bcrypt($data[]);
+            $data['password'] = bcrypt($data['password']);
             $user = $this->user->create($data);
             return response()->json([
                 'data' => [

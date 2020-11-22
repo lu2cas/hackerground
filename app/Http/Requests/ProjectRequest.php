@@ -27,10 +27,10 @@ class ProjectRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'start_date' => ['required', 'date_format:Y-m-d'],
-            'end_date' => ['nullable', 'date_format:Y-m-d'],
+            'started_on' => ['required', 'date_format:Y-m-d'],
+            'ended_on' => ['nullable', 'date_format:Y-m-d'],
             'status' => ['required', Rule::in(['ONGOING', 'PAUSED', 'FINISHED'])],
-            'category' => ['required', Rule::in(['SOFTWARE', 'HARDWARE', 'SOCIAL'])],
+            'category' => ['required', Rule::in(['SOFTWARE', 'HARDWARE', 'SOCIAL', 'OTHER'])],
             'repository' => ['nullable', 'url']
         ];
     }

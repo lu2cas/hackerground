@@ -119,4 +119,24 @@ class HackerspaceController extends Controller
             return response()->json($message->getMessage(), 401);
         }
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function events($id)
+    {
+        try {
+            $hackerspace = $this->hackerspace->findOrFail($id);
+            $events = $hackerspace->event()->paginate(10);
+            return response()->json([
+                'data' => [$events]
+            ], 200);
+        } catch(\Exception $e) {
+            $message = new ApiMessages($e->getMessage());
+            return response()->json($message->getMessage(), 401);
+        }
+    }
 }

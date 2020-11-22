@@ -26,7 +26,7 @@ class PressMentionRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['required', 'string'],
-            'publication_date' => ['required', 'date_format:Y-m-d'],
+            'published_on' => ['required', 'date_format:Y-m-d'],
             'url' => ['required', 'url']
         ];
     }

@@ -18,7 +18,7 @@ class CreatePressMentionsTable extends Migration
             $table->unsignedBigInteger('hackerspace_id');
             $table->string('title');
             $table->text('excerpt');
-            $table->date('publication_date');
+            $table->date('published_on');
             $table->string('url');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');

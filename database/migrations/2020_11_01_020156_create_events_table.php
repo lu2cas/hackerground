@@ -19,10 +19,11 @@ class CreateEventsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->enum('type', ['ONLINE', 'IN_PERSON']);
+            $table->string('url')->nullable();
             // @todo Change "activity" to a foreign key to an external table
-            $table->enum('activity', ['MEETING', 'WORKSHOP', 'TALK', 'HACKATON', 'CTF', 'CODING_DOJO']);
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->enum('activity', ['MEETING', 'WORKSHOP', 'TALK', 'HACKATON', 'CTF', 'CODING_DOJO', 'OTHER']);
+            $table->dateTime('starts_at');
+            $table->dateTime('ends_at');
             $table->text('summary')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');

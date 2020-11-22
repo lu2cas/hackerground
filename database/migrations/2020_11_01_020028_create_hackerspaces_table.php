@@ -19,7 +19,7 @@ class CreateHackerspacesTable extends Migration
             $table->text('description');
             $table->string('geolocation')->nullable();
             $table->string('logo_path')->nullable();
-            $table->date('foundation');
+            $table->date('founded_on');
             $table->enum('status', ['ACTIVE', 'INACTIVE', 'PLANNED']);
             $table->string('website')->nullable();
             $table->string('email')->unique();

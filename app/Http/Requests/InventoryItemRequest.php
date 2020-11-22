@@ -27,7 +27,7 @@ class InventoryItemRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'type' => ['required', Rule::in(['TOOL', 'ELECTRONIC_COMPONENT', 'MACHINE', 'RESOURCE'])]
+            'type' => ['required', Rule::in(['TOOL', 'ELECTRONIC_COMPONENT', 'MACHINE', 'RESOURCE', 'OTHER'])]
         ];
     }
 }

@@ -18,12 +18,15 @@ class CreateHackerspacesUsersTable extends Migration
             $table->unsignedBigInteger('user_id');
             // @todo Change "profile" to a foreign key to an external table
             $table->enum('profile', ['MEMBER', 'ADMIN']);
-            $table->dateTime('approved_at')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();
+            $table->dateTime('approved_at')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->dateTime('updated_at')->nullable();
 
             $table->foreign('hackerspace_id')->references('id')->on('hackerspaces');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('approved_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 

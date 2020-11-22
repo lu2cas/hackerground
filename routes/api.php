@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('hackerspaces.')->group(function() {
         Route::resource('hackerspaces', 'HackerspaceController');
+        Route::get('/hackerspaces/{id}/events', 'HackerspaceController@events');
     });
 
     Route::name('users.')->group(function() {

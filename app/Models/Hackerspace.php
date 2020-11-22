@@ -14,7 +14,7 @@ class Hackerspace extends Model
         'description',
         'geolocation',
         'logo_path',
-        'foundation',
+        'founded_on',
         'status',
         'website',
         'email',
@@ -24,5 +24,9 @@ class Hackerspace extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function event() {
+        return $this->hasMany(Event::class);
     }
 }

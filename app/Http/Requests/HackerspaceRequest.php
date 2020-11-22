@@ -30,7 +30,7 @@ class HackerspaceRequest extends FormRequest
             'geolocation' => ['nullable', 'string'],
             // @todo Validate uploaded image and its MIME type
             // 'logo_path' => ['nullable', 'image'],
-            'foundation' => ['required', 'date_format:Y-m-d'],
+            'founded_on' => ['required', 'date_format:Y-m-d'],
             'status' => ['required', Rule::in(['ACTIVE', 'INACTIVE', 'PLANNED'])],
             'website' => ['nullable', 'url'],
             'email' => ['required', 'email']

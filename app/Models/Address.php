@@ -19,7 +19,9 @@ class Address extends Model
         'zip_code',
         'created_by',
         'updated_by',
-        'hackerspace_id'
+        'hackerspace_id',
+        'user_id',
+        'event_id'
     ];
 
     public function user() {
@@ -28,5 +30,9 @@ class Address extends Model
 
     public function hackerspace() {
         return $this->belongsTo(Hackerspace::class);
+    }
+
+    public function event() {
+        return $this->belongsTo(Event::class);
     }
 }

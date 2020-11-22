@@ -19,7 +19,7 @@ class CreateInventoryItemsTable extends Migration
             $table->string('name');
             $table->text('description');
             // @todo Change "type" to a foreign key of an external table
-            $table->enum('type', ['TOOL', 'ELECTRONIC_COMPONENT', 'MACHINE', 'RESOURCE']);
+            $table->enum('type', ['TOOL', 'ELECTRONIC_COMPONENT', 'MACHINE', 'RESOURCE', 'OTHER']);
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();

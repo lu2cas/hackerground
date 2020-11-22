@@ -18,11 +18,11 @@ class CreateProjectsTable extends Migration
             $table->unsignedBigInteger('hackerspace_id');
             $table->string('title');
             $table->text('description');
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
+            $table->date('started_on');
+            $table->date('ended_on')->nullable();
             $table->enum('status', ['ONGOING', 'PAUSED', 'FINISHED']);
             // @todo Change "category" to a foreign key to an external table
-            $table->enum('category', ['SOFTWARE', 'HARDWARE', 'SOCIAL']);
+            $table->enum('category', ['SOFTWARE', 'HARDWARE', 'SOCIAL', 'OTHER']);
             $table->string('repository')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
