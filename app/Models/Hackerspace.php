@@ -22,11 +22,45 @@ class Hackerspace extends Model
         'updated_by'
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function address() {
+        return $this->belongsToMany(Address::class)
+                    ->using(HackerspaceAddress::class)
+                    ->withPivot('created_by', 'updated_by')
+                    ->withTimestamps();
+    }
+
+    public function gallery() {
+        return $this->belongsToMany(Gallery::class)
+                    ->using(HackerspaceGallery::class)
+                    ->withPivot('created_by', 'updated_by')
+                    ->withTimestamps();
     }
 
     public function event() {
         return $this->hasMany(Event::class);
+    }
+
+    public function project() {
+        return $this->hasMany(Project::class);
+    }
+
+    public function inventoryItem() {
+        return $this->hasMany(InventoryItem::class);
+    }
+
+    public function pressMention() {
+        return $this->hasMany(PressMention::class);
+    }
+
+    public function blogPost() {
+        return $this->hasMany(BlogPost::class);
+    }
+
+    public function createdBy() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

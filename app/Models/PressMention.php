@@ -10,20 +10,24 @@ class PressMention extends Model
     use HasFactory;
 
     protected $fillable = [
+        'hackerspace_id',
         'title',
         'excerpt',
         'published_on',
         'url',
         'created_by',
         'updated_by',
-        'hackerspace_id'
     ];
-
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
 
     public function hackerspace() {
         return $this->belongsTo(Hackerspace::class);
+    }
+
+    public function createdBy() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

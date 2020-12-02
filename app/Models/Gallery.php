@@ -13,15 +13,30 @@ class Gallery extends Model
         'title',
         'description',
         'created_by',
-        'updated_by',
-        'hackerspace_id'
+        'updated_by'
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function hackerspace() {
+        return $this->hasOne(HackerspaceGallery::class);
     }
 
-    public function hackerspace() {
-        return $this->belongsTo(Hackerspace::class);
+    public function event() {
+        return $this->hasOne(EventGallery::class);
+    }
+
+    public function project() {
+        return $this->hasOne(ProjectGallery::class);
+    }
+
+    public function galleryItems() {
+        return $this->hasMany(GalleryItem::class);
+    }
+
+    public function createdBy() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

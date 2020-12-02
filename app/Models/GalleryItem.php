@@ -12,18 +12,22 @@ class GalleryItem extends Model
     protected $table = 'galleries_items';
 
     protected $fillable = [
+        'gallery_id',
         'title',
         'path',
-        'gallery_id',
         'created_by',
         'updated_by'
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
-
     public function gallery() {
         return $this->belongsTo(Gallery::class);
+    }
+
+    public function createdBy() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

@@ -33,7 +33,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'remember_token'
     ];
 
     /**
@@ -45,7 +45,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function hackerspace() {
-        return $this->hasMany(Hackerspace::class);
+    public function address() {
+        return $this->belongsToMany(Address::class, 'users_addresses')
+                    ->using(UserAddress::class)
+                    ->withPivot('created_by', 'updated_by')
+                    ->withTimestamps();
     }
+
+    public function hackerspace() {
+        return $this->hasMany(Hackerspace::class, 'created_by');
+    }
+
 }

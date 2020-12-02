@@ -3,24 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ProjectUpdate extends Model
+class ProjectGallery extends Pivot
 {
     use HasFactory;
 
-    protected $table = 'projects_updates';
-
     protected $fillable = [
         'project_id',
-        'title',
-        'body',
+        'gallery_id',
         'created_by',
         'updated_by'
     ];
 
     public function project() {
         return $this->belongsTo(Project::class);
+    }
+
+    public function gallery() {
+        return $this->belongsTo(Gallery::class);
     }
 
     public function createdBy() {

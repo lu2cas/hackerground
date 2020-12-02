@@ -18,21 +18,39 @@ class Address extends Model
         'complement',
         'zip_code',
         'created_by',
-        'updated_by',
-        'hackerspace_id',
-        'user_id',
-        'event_id'
+        'updated_by'
+    ];
+
+    protected $hidden = [
+        'pivot'
     ];
 
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'users_addresses')
+                    ->using(UserAddress::class)
+                    ->withPivot('created_by', 'updated_by')
+                    ->withTimestamps();
     }
 
     public function hackerspace() {
-        return $this->belongsTo(Hackerspace::class);
+        return $this->belongsToMany(Hackerspace::class)
+                    ->using(HackerspaceAddress::class)
+                    ->withPivot('created_by', 'updated_by')
+                    ->withTimestamps();
     }
 
     public function event() {
-        return $this->belongsTo(Event::class);
+        return $this->belongsToMany(Event::class)
+                    ->using(EventAddress::class)
+                    ->withPivot('created_by', 'updated_by')
+                    ->withTimestamps();
+    }
+
+    public function createdBy() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

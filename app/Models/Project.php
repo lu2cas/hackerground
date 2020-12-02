@@ -10,6 +10,7 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
+        'hackerspace_id',
         'title',
         'description',
         'started_on',
@@ -17,16 +18,30 @@ class Project extends Model
         'status',
         'category',
         'repository',
-        'hackerspace_id',
         'created_by',
         'updated_by'
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
-
     public function hackerspace() {
         return $this->belongsTo(Hackerspace::class);
+    }
+
+    public function gallery() {
+        return $this->belongsToMany(Gallery::class)
+                    ->using(ProjectGallery::class)->withTimestamps()
+                    ->withPivot('created_by', 'updated_by')
+                    ->withTimestamps();
+    }
+
+    public function projectUpdate() {
+        return $this->hasMany(ProjectUpdate::class);
+    }
+
+    public function createdBy() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

@@ -15,10 +15,7 @@ class CreateAddressesTable extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('hackerspace_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('event_id')->nullable();
-            // @todo Change "country", "state" and "city" foreign keys to preloaded external tables
+            // @todo Change "country", "state" and "city" to foreign keys to preloaded external tables
             $table->string('country');
             $table->string('state');
             $table->string('city');
@@ -30,9 +27,6 @@ class CreateAddressesTable extends Migration
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
 
-            $table->foreign('hackerspace_id')->references('id')->on('hackerspaces');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('event_id')->references('id')->on('events');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('updated_by')->references('id')->on('users');
         });
