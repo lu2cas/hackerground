@@ -16,6 +16,8 @@ class EventAddress extends Pivot
         'updated_by'
     ];
 
+    protected $table = 'events_addresses';
+
     public function event() {
         return $this->belongsTo(Event::class);
     }

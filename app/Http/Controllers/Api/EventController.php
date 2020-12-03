@@ -29,7 +29,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = $this->event->paginate(10);
+        $events = $this->event->with('address')->paginate(10);
         return response()->json($events, 200);
     }
 
@@ -42,8 +42,16 @@ class EventController extends Controller
     public function store(EventRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $event = $this->event->create($data);
+            $event = $this->event->create(array_merge($data, $user_keys));
+            if ($request->has('address')) {
+                // @todo Validate $data['address']
+                $event->address()->create(array_merge($data['address'], $user_keys), $user_keys);
+            }
             return response()->json([
                 'data' => [
                     'message' => 'Evento criado com sucesso.'
@@ -64,7 +72,7 @@ class EventController extends Controller
     public function show($id)
     {
         try {
-            $event = $this->event->findOrFail($id);
+            $event = $this->event->with('address')->findOrFail($id);
             return response()->json([
                 'data' => [$event]
             ], 200);
@@ -86,7 +94,20 @@ class EventController extends Controller
         $data = $request->all();
         try {
             $event = $this->event->findOrFail($id);
-            $event->update($data);
+            $event->update(array_merge($data, ['updated_by' => 1]));
+            if ($request->has('address')) {
+                // @todo Validate $data['address']
+                $address = $event->address();
+                if ($address->exists()) {
+                    $address->first()->update(array_merge($data['address'], ['updated_by' => 1]));
+                } else {
+                    $user_keys = [
+                        'created_by' => 1,
+                        'updated_by' => 1
+                    ];
+                    $event->address()->create(array_merge($data['address'], $user_keys), $user_keys);
+                }
+            }
             return response()->json([
                 'data' => [
                     'message' => 'Evento atualizado com sucesso.'
@@ -108,6 +129,11 @@ class EventController extends Controller
     {
         try {
             $event = $this->event->findOrFail($id);
+            if ($event->address()->exists()) {
+                $address = $event->address()->first();
+                $event->address()->detach();
+                $address->delete();
+            }
             $event->delete();
             return response()->json([
                 'data' => [

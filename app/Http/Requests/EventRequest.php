@@ -30,8 +30,8 @@ class EventRequest extends FormRequest
             'type' => ['required', Rule::in(['ONLINE', 'IN_PERSON'])],
             'url' => ['nullable', 'url', 'max:255'],
             'activity' => ['required', Rule::in(['MEETING', 'WORKSHOP', 'TALK', 'HACKATON', 'CTF', 'CODING_DOJO', 'OTHER'])],
-            'starts_at' => ['required', 'date_format:Y-m-d'],
-            'ends_at' => ['required', 'date_format:Y-m-d'],
+            'starts_at' => ['required', 'date_format:Y-m-d H:i:s'],
+            'ends_at' => ['required', 'date_format:Y-m-d H:i:s'],
             'summary' => ['nullable', 'string']
         ];
     }
