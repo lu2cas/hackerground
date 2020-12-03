@@ -42,8 +42,12 @@ class InventoryItemController extends Controller
     public function store(InventoryItemRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $inventoryItem = $this->inventoryItem->create($data);
+            $inventoryItem = $this->inventoryItem->create(array_merge($data, $user_keys));
             return response()->json([
                 'data' => [
                     'message' => 'Item de inventário criado com sucesso.'
@@ -84,9 +88,12 @@ class InventoryItemController extends Controller
     public function update(InventoryItemRequest $request, $id)
     {
         $data = $request->all();
+        if ($request->has('hackerspace_id')) {
+            unset($data['hackerspace_id']);
+        }
         try {
             $inventoryItem = $this->inventoryItem->findOrFail($id);
-            $inventoryItem->update($data);
+            $inventoryItem->update(array_merge($data, ['updated_by' => 1]));
             return response()->json([
                 'data' => [
                     'message' => 'Item de inventário atualizado com sucesso.'

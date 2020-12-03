@@ -157,9 +157,7 @@ class HackerspaceController extends Controller
         try {
             $hackerspace = $this->hackerspace->findOrFail($id);
             $events = $hackerspace->event()->paginate(10);
-            return response()->json([
-                'data' => [$events]
-            ], 200);
+            return response()->json($events, 200);
         } catch(\Exception $e) {
             $message = new ApiMessages($e->getMessage());
             return response()->json($message->getMessage(), 401);
@@ -177,9 +175,61 @@ class HackerspaceController extends Controller
         try {
             $hackerspace = $this->hackerspace->findOrFail($id);
             $projects = $hackerspace->project()->paginate(10);
-            return response()->json([
-                'data' => [$projects]
-            ], 200);
+            return response()->json($projects, 200);
+        } catch(\Exception $e) {
+            $message = new ApiMessages($e->getMessage());
+            return response()->json($message->getMessage(), 401);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function blogPosts($id)
+    {
+        try {
+            $hackerspace = $this->hackerspace->findOrFail($id);
+            $blogPosts = $hackerspace->blogPost()->paginate(10);
+            return response()->json($blogPosts, 200);
+        } catch(\Exception $e) {
+            $message = new ApiMessages($e->getMessage());
+            return response()->json($message->getMessage(), 401);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function pressMentions($id)
+    {
+        try {
+            $hackerspace = $this->hackerspace->findOrFail($id);
+            $pressMentions = $hackerspace->pressMention()->paginate(10);
+            return response()->json($pressMentions, 200);
+        } catch(\Exception $e) {
+            $message = new ApiMessages($e->getMessage());
+            return response()->json($message->getMessage(), 401);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function inventoryItems($id)
+    {
+        try {
+            $hackerspace = $this->hackerspace->findOrFail($id);
+            $inventoryItems = $hackerspace->inventoryItem()->paginate(10);
+            return response()->json($inventoryItems, 200);
         } catch(\Exception $e) {
             $message = new ApiMessages($e->getMessage());
             return response()->json($message->getMessage(), 401);

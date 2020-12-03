@@ -42,8 +42,12 @@ class ProjectController extends Controller
     public function store(ProjectRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $project = $this->project->create($data);
+            $project = $this->project->create(array_merge($data, $user_keys));
             return response()->json([
                 'data' => [
                     'message' => 'Projeto criado com sucesso.'
@@ -64,7 +68,7 @@ class ProjectController extends Controller
     public function show($id)
     {
         try {
-            $project = $this->project->findOrFail($id);
+            $project = $this->project->with('projectUpdate')->findOrFail($id);
             return response()->json([
                 'data' => [$project]
             ], 200);
@@ -84,9 +88,12 @@ class ProjectController extends Controller
     public function update(ProjectRequest $request, $id)
     {
         $data = $request->all();
+        if ($request->has('hackerspace_id')) {
+            unset($data['hackerspace_id']);
+        }
         try {
             $project = $this->project->findOrFail($id);
-            $project->update($data);
+            $project->update(array_merge($data, ['updated_by' => 1]));
             return response()->json([
                 'data' => [
                     'message' => 'Projeto atualizado com sucesso.'

@@ -42,8 +42,12 @@ class AddressController extends Controller
     public function store(AddressRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $address = $this->address->create($data);
+            $address = $this->address->create(array_merge($data, $user_keys));
             return response()->json([
                 'data' => [
                     'message' => 'Endereço criado com sucesso.'
@@ -86,7 +90,7 @@ class AddressController extends Controller
         $data = $request->all();
         try {
             $address = $this->address->findOrFail($id);
-            $address->update($data);
+            $address->update(array_merge($data, ['updated_by' => 1]));
             return response()->json([
                 'data' => [
                     'message' => 'Endereço atualizado com sucesso.'

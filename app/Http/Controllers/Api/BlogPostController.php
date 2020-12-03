@@ -42,8 +42,12 @@ class BlogPostController extends Controller
     public function store(BlogPostRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $blogPost = $this->blogPost->create($data);
+            $blogPost = $this->blogPost->create(array_merge($data, $user_keys));
             return response()->json([
                 'data' => [
                     'message' => 'Postagem criada com sucesso.'
@@ -84,9 +88,12 @@ class BlogPostController extends Controller
     public function update(BlogPostRequest $request, $id)
     {
         $data = $request->all();
+        if ($request->has('hackerspace_id')) {
+            unset($data['hackerspace_id']);
+        }
         try {
             $blogPost = $this->blogPost->findOrFail($id);
-            $blogPost->update($data);
+            $blogPost->update(array_merge($data, ['updated_by' => 1]));
             return response()->json([
                 'data' => [
                     'message' => 'Postagem atualizada com sucesso.'

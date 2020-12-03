@@ -26,7 +26,7 @@ class Address extends Model
     ];
 
     public function user() {
-        return $this->belongsToMany(User::class, 'users_addresses')
+        return $this->belongsToMany(User::class)
                     ->using(UserAddress::class)
                     ->withPivot('created_by', 'updated_by')
                     ->withTimestamps();

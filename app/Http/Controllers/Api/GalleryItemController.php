@@ -42,8 +42,12 @@ class GalleryItemController extends Controller
     public function store(GalleryItemRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $galleryItem = $this->galleryItem->create($data);
+            $galleryItem = $this->galleryItem->create(array_merge($data, $user_keys));
             return response()->json([
                 'data' => [
                     'message' => 'Item de galeria criado com sucesso.'
@@ -84,9 +88,12 @@ class GalleryItemController extends Controller
     public function update(GalleryItemRequest $request, $id)
     {
         $data = $request->all();
+        if ($request->has('gallery_id')) {
+            unset($data['gallery_id']);
+        }
         try {
             $galleryItem = $this->galleryItem->findOrFail($id);
-            $galleryItem->update($data);
+            $galleryItem->update(array_merge($data, ['updated_by' => 1]));
             return response()->json([
                 'data' => [
                     'message' => 'Item de galeria atualizado com sucesso.'

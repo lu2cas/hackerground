@@ -42,8 +42,12 @@ class GalleryController extends Controller
     public function store(GalleryRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $gallery = $this->gallery->create($data);
+            $gallery = $this->gallery->create(array_merge($data, $user_keys));
             return response()->json([
                 'data' => [
                     'message' => 'Galeria criada com sucesso.'
@@ -64,7 +68,7 @@ class GalleryController extends Controller
     public function show($id)
     {
         try {
-            $gallery = $this->gallery->findOrFail($id);
+            $gallery = $this->gallery->with('galleryItems')->findOrFail($id);
             return response()->json([
                 'data' => [$gallery]
             ], 200);
@@ -86,7 +90,7 @@ class GalleryController extends Controller
         $data = $request->all();
         try {
             $gallery = $this->gallery->findOrFail($id);
-            $gallery->update($data);
+            $gallery->update(array_merge($data, ['updated_by' => 1]));
             return response()->json([
                 'data' => [
                     'message' => 'Galeria atualizada com sucesso.'
@@ -108,6 +112,7 @@ class GalleryController extends Controller
     {
         try {
             $gallery = $this->gallery->findOrFail($id);
+            $gallery->galleryItems()->delete();
             $gallery->delete();
             return response()->json([
                 'data' => [

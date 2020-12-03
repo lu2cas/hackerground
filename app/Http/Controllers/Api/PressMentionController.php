@@ -42,8 +42,12 @@ class PressMentionController extends Controller
     public function store(PressMentionRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $pressMention = $this->pressMention->create($data);
+            $pressMention = $this->pressMention->create(array_merge($data, $user_keys));
             return response()->json([
                 'data' => [
                     'message' => 'Menção na imprensa criada com sucesso.'
@@ -84,9 +88,12 @@ class PressMentionController extends Controller
     public function update(PressMentionRequest $request, $id)
     {
         $data = $request->all();
+        if ($request->has('hackerspace_id')) {
+            unset($data['hackerspace_id']);
+        }
         try {
             $pressMention = $this->pressMention->findOrFail($id);
-            $pressMention->update($data);
+            $pressMention->update(array_merge($data, ['updated_by' => 1]));
             return response()->json([
                 'data' => [
                     'message' => 'Menção na imprensa atualizada com sucesso.'

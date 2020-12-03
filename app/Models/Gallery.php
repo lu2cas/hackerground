@@ -17,15 +17,24 @@ class Gallery extends Model
     ];
 
     public function hackerspace() {
-        return $this->hasOne(HackerspaceGallery::class);
+        return $this->belongsToMany(Hackerspace::class)
+            ->using(HackerspaceGallery::class)
+            ->withPivot('created_by', 'updated_by')
+            ->withTimestamps();
     }
 
     public function event() {
-        return $this->hasOne(EventGallery::class);
+        return $this->belongsToMany(Event::class)
+            ->using(EventGallery::class)
+            ->withPivot('created_by', 'updated_by')
+            ->withTimestamps();
     }
 
     public function project() {
-        return $this->hasOne(ProjectGallery::class);
+        return $this->belongsToMany(Project::class)
+            ->using(ProjectGallery::class)
+            ->withPivot('created_by', 'updated_by')
+            ->withTimestamps();
     }
 
     public function galleryItems() {

@@ -21,6 +21,10 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function() {
     Route::name('hackerspaces.')->group(function() {
         Route::resource('hackerspaces', 'HackerspaceController');
         Route::get('/hackerspaces/{id}/events', 'HackerspaceController@events');
+        Route::get('/hackerspaces/{id}/projects', 'HackerspaceController@projects');
+        Route::get('/hackerspaces/{id}/blog-posts', 'HackerspaceController@blogPosts');
+        Route::get('/hackerspaces/{id}/press-mentions', 'HackerspaceController@pressMentions');
+        Route::get('/hackerspaces/{id}/inventory-items', 'HackerspaceController@inventoryItems');
     });
 
     Route::name('users.')->group(function() {

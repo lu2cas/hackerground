@@ -42,8 +42,12 @@ class ProjectUpdateController extends Controller
     public function store(ProjectUpdateRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $projectUpdate = $this->projectUpdate->create($data);
+            $projectUpdate = $this->projectUpdate->create(array_merge($data, $user_keys));
             return response()->json([
                 'data' => [
                     'message' => 'Atualização de projeto criada com sucesso.'
@@ -84,9 +88,12 @@ class ProjectUpdateController extends Controller
     public function update(ProjectUpdateRequest $request, $id)
     {
         $data = $request->all();
+        if ($request->has('project_id')) {
+            unset($data['project_id']);
+        }
         try {
             $projectUpdate = $this->projectUpdate->findOrFail($id);
-            $projectUpdate->update($data);
+            $projectUpdate->update(array_merge($data, ['updated_by' => 1]));
             return response()->json([
                 'data' => [
                     'message' => 'Atualização de projeto atualizada com sucesso.'

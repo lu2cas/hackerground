@@ -92,6 +92,9 @@ class EventController extends Controller
     public function update(EventRequest $request, $id)
     {
         $data = $request->all();
+        if ($request->has('hackerspace_id')) {
+            unset($data['hackerspace_id']);
+        }
         try {
             $event = $this->event->findOrFail($id);
             $event->update(array_merge($data, ['updated_by' => 1]));
