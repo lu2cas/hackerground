@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Api\ApiMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Models\Address;
 use App\Models\User;
 
 class UserController extends Controller
@@ -23,7 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->user->paginate(10);
+        $users = $this->user->with('address')->paginate(10);
         return response()->json($users, 200);
     }
 
@@ -35,13 +36,23 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $data = $request->all();
         if (!$request->has('password') || !$request->get('password')) {
             return response()->json('O campo senha é obrigatório.', 401);
         }
         try {
+            $data = $request->all();
             $data['password'] = bcrypt($data['password']);
-            $user = $this->user->create($data);
+            $user = $this->user->create(array_merge($data));
+            $user_keys = [
+                'created_by' => $user->id,
+                'updated_by' => $user->id
+            ];
+            if ($request->has('address')) {
+                $user->address()->create(array_merge($data['address'], $user_keys), $user_keys);
+            }
+            //$address = Address::create(array_merge($data['address'], $user_keys));
+            //$user->address()->sync([$address->id => $user_keys]);
+
             return response()->json([
                 'data' => [
                     'message' => 'Usuário criado com sucesso.'
@@ -62,7 +73,7 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $user = $this->user->findOrFail($id);
+            $user = $this->user->with('address')->findOrFail($id);
             return response()->json([
                 'data' => [$user]
             ], 200);
@@ -77,6 +88,7 @@ class UserController extends Controller
      *
      * @param  UserRequest  $request
      * @param  int  $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UserRequest $request, $id)
@@ -89,7 +101,20 @@ class UserController extends Controller
         }
         try {
             $user = $this->user->findOrFail($id);
-            $user->update($data);
+            $user->update(array_merge($data, ['updated_by' => $user->id]));
+            if ($request->has('address')) {
+                $address = $user->address();
+                if ($address->exists()) {
+                    $address->first()->update(array_merge($data['address'], ['updated_by' => $user->id]));
+                } else {
+                    $user_keys = [
+                        'created_by' => $user->id,
+                        'updated_by' => $user->id
+                    ];
+                    $user->address()->create(array_merge($data['address'], $user_keys), $user_keys);
+                }
+            }
+
             return response()->json([
                 'data' => [
                     'message' => 'Usuário atualizado com sucesso.'
@@ -111,6 +136,11 @@ class UserController extends Controller
     {
         try {
             $user = $this->user->findOrFail($id);
+            if ($user->address()->exists()) {
+                $address = $user->address()->first();
+                $user->address()->detach();
+                $address->delete();
+            }
             $user->delete();
             return response()->json([
                 'data' => [
