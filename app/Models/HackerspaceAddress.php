@@ -16,6 +16,8 @@ class HackerspaceAddress extends Pivot
         'updated_by'
     ];
 
+    protected $table = 'hackerspaces_addresses';
+
     public function hackerspace() {
         return $this->belongsTo(Hackerspace::class);
     }

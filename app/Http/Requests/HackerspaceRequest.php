@@ -33,7 +33,7 @@ class HackerspaceRequest extends FormRequest
             'founded_on' => ['required', 'date_format:Y-m-d'],
             'status' => ['required', Rule::in(['ACTIVE', 'INACTIVE', 'PLANNED'])],
             'website' => ['nullable', 'url'],
-            'email' => ['required', 'email']
+            'email' => ['required', 'email', Rule::unique('hackerspaces', 'email')->ignore($this->hackerspace)]
         ];
     }
 }

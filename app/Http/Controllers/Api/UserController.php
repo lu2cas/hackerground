@@ -39,20 +39,20 @@ class UserController extends Controller
         if (!$request->has('password') || !$request->get('password')) {
             return response()->json('O campo senha é obrigatório.', 401);
         }
+        $data = $request->all();
         try {
-            $data = $request->all();
             $data['password'] = bcrypt($data['password']);
-            $user = $this->user->create(array_merge($data));
+            $user = $this->user->create($data);
             $user_keys = [
                 'created_by' => $user->id,
                 'updated_by' => $user->id
             ];
             if ($request->has('address')) {
+                // @todo Validate $data['address']
                 $user->address()->create(array_merge($data['address'], $user_keys), $user_keys);
+                //$address = Address::create(array_merge($data['address'], $user_keys));
+                //$user->address()->sync([$address->id => $user_keys]);
             }
-            //$address = Address::create(array_merge($data['address'], $user_keys));
-            //$user->address()->sync([$address->id => $user_keys]);
-
             return response()->json([
                 'data' => [
                     'message' => 'Usuário criado com sucesso.'
@@ -103,6 +103,7 @@ class UserController extends Controller
             $user = $this->user->findOrFail($id);
             $user->update(array_merge($data, ['updated_by' => $user->id]));
             if ($request->has('address')) {
+                // @todo Validate $data['address']
                 $address = $user->address();
                 if ($address->exists()) {
                     $address->first()->update(array_merge($data['address'], ['updated_by' => $user->id]));

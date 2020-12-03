@@ -23,7 +23,7 @@ class Hackerspace extends Model
     ];
 
     public function address() {
-        return $this->belongsToMany(Address::class)
+        return $this->belongsToMany(Address::class, 'hackerspaces_addresses')
                     ->using(HackerspaceAddress::class)
                     ->withPivot('created_by', 'updated_by')
                     ->withTimestamps();

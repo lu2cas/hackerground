@@ -29,7 +29,7 @@ class HackerspaceController extends Controller
      */
     public function index()
     {
-        $hackerspaces = $this->hackerspace->paginate(10);
+        $hackerspaces = $this->hackerspace->with('address')->paginate(10);
         return response()->json($hackerspaces, 200);
     }
 
@@ -42,8 +42,16 @@ class HackerspaceController extends Controller
     public function store(HackerspaceRequest $request)
     {
         $data = $request->all();
+        $user_keys = [
+            'created_by' => 1,
+            'updated_by' => 1
+        ];
         try {
-            $hackerspace = $this->hackerspace->create($data);
+            $hackerspace = $this->hackerspace->create(array_merge($data, $user_keys));
+            if ($request->has('address')) {
+                // @todo Validate $data['address']
+                $hackerspace->address()->create(array_merge($data['address'], $user_keys), $user_keys);
+            }
             return response()->json([
                 'data' => [
                     'message' => 'Hackerspace criado com sucesso.'
@@ -64,7 +72,7 @@ class HackerspaceController extends Controller
     public function show($id)
     {
         try {
-            $hackerspace = $this->hackerspace->findOrFail($id);
+            $hackerspace = $this->hackerspace->with('address')->findOrFail($id);
             return response()->json([
                 'data' => [$hackerspace]
             ], 200);
@@ -86,7 +94,20 @@ class HackerspaceController extends Controller
         $data = $request->all();
         try {
             $hackerspace = $this->hackerspace->findOrFail($id);
-            $hackerspace->update($data);
+            $hackerspace->update(array_merge($data, ['updated_by' => 1]));
+            if ($request->has('address')) {
+                // @todo Validate $data['address']
+                $address = $hackerspace->address();
+                if ($address->exists()) {
+                    $address->first()->update(array_merge($data['address'], ['updated_by' => 1]));
+                } else {
+                    $user_keys = [
+                        'created_by' => 1,
+                        'updated_by' => 1
+                    ];
+                    $hackerspace->address()->create(array_merge($data['address'], $user_keys), $user_keys);
+                }
+            }
             return response()->json([
                 'data' => [
                     'message' => 'Hackerspace atualizado com sucesso.'
@@ -108,6 +129,11 @@ class HackerspaceController extends Controller
     {
         try {
             $hackerspace = $this->hackerspace->findOrFail($id);
+            if ($hackerspace->address()->exists()) {
+                $address = $hackerspace->address()->first();
+                $hackerspace->address()->detach();
+                $address->delete();
+            }
             $hackerspace->delete();
             return response()->json([
                 'data' => [
@@ -133,6 +159,26 @@ class HackerspaceController extends Controller
             $events = $hackerspace->event()->paginate(10);
             return response()->json([
                 'data' => [$events]
+            ], 200);
+        } catch(\Exception $e) {
+            $message = new ApiMessages($e->getMessage());
+            return response()->json($message->getMessage(), 401);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function projects($id)
+    {
+        try {
+            $hackerspace = $this->hackerspace->findOrFail($id);
+            $projects = $hackerspace->project()->paginate(10);
+            return response()->json([
+                'data' => [$projects]
             ], 200);
         } catch(\Exception $e) {
             $message = new ApiMessages($e->getMessage());
